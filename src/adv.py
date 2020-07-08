@@ -1,5 +1,5 @@
 from room import Room
-
+from player import Player
 # Declare all the rooms
 
 room = {
@@ -39,6 +39,8 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 
+player = Player(current_room=room['outside'])
+
 # Write a loop that:
 #
 # * Prints the current room name
@@ -49,3 +51,30 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+# Getting input of cardinal direction, changing to caps.
+answer = ''  # Empty string.
+
+while answer != 'Q':  # While the answer isn't 'Q'
+    print(player.current_room)  # Print room information of current room.
+    print('=' * 70)  # For improved readability.
+    # Get user input, make uppercase.
+    answer = input('What direction should I take? [N/S/E/W]: ').upper()
+    print('-' * 55)  # For improved readability.
+    if answer == 'N':  # If the answer is north...
+        if hasattr(player.current_room, 'n_to'):  # If N room exists...
+            player.current_room = player.current_room.n_to  # Make the move.M
+    elif answer == 'S':  # If the answer is south...
+        if hasattr(player.current_room, 's_to'):  # If S room exists...
+            player.current_room = player.current_room.s_to  # Make the move.
+    elif answer == 'E':  # If the answer is east...
+        if hasattr(player.current_room, 'e_to'):  # If E room exists...
+            player.current_room = player.current_room.e_to  # Make the move.
+    elif answer == 'W':  # If the answer is west...
+        if hasattr(player.current_room, 'w_to'):  # If W room exists...
+            player.current_room = player.current_room.w_to  # Make the move.
+    elif answer == 'Q':  # If the user wants to quit...
+        exit  # Quit the game.
+    elif answer not in ['N', 'S', 'E', 'W', 'Q']:
+        print('Invalid cardinal direction!')
+        print('=' * 70)  # For improved readability.
