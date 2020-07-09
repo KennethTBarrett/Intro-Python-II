@@ -39,7 +39,7 @@ room['outside'].items = [None]
 room['foyer'].items = ['sword', 'lamp', 'knife']
 room['overlook'].items = ['rock']
 room['narrow'].items = ['torch', 'scythe']
-room['treasure'].items = ['gold', 'jewels', 'jewelry']
+room['treasure'].items = ['dust', 'cobwebs']
 
 #
 # Main
