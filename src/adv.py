@@ -1,5 +1,6 @@
 from room import Room
 from player import Player
+from item import Item
 # Declare all the rooms
 
 room = {
@@ -32,6 +33,13 @@ room['overlook'].s_to = room['foyer']
 room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
+
+# Adding items to the rooms.
+room['outside'].items = [None]
+room['foyer'].items = ['sword', 'lamp', 'knife']
+room['overlook'].items = ['rock']
+room['narrow'].items = ['torch', 'scythe']
+room['treasure'].items = ['gold', 'jewels', 'jewelry']
 
 #
 # Main
@@ -95,7 +103,11 @@ while answer != 'Q':  # While the answer isn't 'Q'
             exit  # Quit the game.
         elif answer == "I":
             print('Current user inventory:')
-            print(player.current_room.items)
+            if player.items:
+                print([item.upper() for item in player.items])
+            else:
+                print('Inventory is empty!')
+            print('=-' * 25)
         elif answer not in ['N', 'S', 'E', 'W', 'Q', 'I']:
             print('Invalid cardinal direction!')
             print('=' * 70)  # For improved readability.
@@ -105,6 +117,7 @@ while answer != 'Q':  # While the answer isn't 'Q'
             if answer[1].lower() in player.current_room.items:  # Confirm the item is in the room.
                 player.items.append(answer[1].lower())  # Append to the player inventory.
                 player.current_room.items.remove(answer[1].lower())  # Remove from room inventory.
+                print(Item.on_take(item=answer[1].lower()))
             elif answer[1].lower() not in player.current_room.items:  # If not in room...
                 print('Item does not exist in this room!')  # Print error.
                 print('=-' * 25)  # For improved readability.
@@ -112,6 +125,7 @@ while answer != 'Q':  # While the answer isn't 'Q'
         elif answer[0].lower() == 'drop' and answer[1].lower() in player.items:
             player.items.remove(answer[1].lower())  # Remove that item from inventory.
             player.current_room.items.append(answer[1].lower())
+            print(Item.on_drop(answer[1].lower()))
         # If command is drop + item does not exist in our inventory.
         elif answer[0].lower() == 'drop' and answer[1].lower() not in player.items:
             print("You don't have that item in your inventory to drop!")  # Print error.
@@ -121,3 +135,4 @@ while answer != 'Q':  # While the answer isn't 'Q'
             print('=-' * 25)  # For improved readability.
     else:
         print('You have entered an invalid command!')
+        print('=-' * 25)  # For improved readability.
