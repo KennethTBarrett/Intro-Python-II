@@ -38,10 +38,10 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
-name = input('Please enter your name: ')
+name = input('Please enter your name: ')  # Take user input for name.
 player = Player(name=name, current_room=room['outside'])
 print(f'{name}, welcome to the adventure game!')
-print('*' * 50)  # For improved readability
+print('*' * 75)  # For improved readability
 
 # Write a loop that:
 #
@@ -61,22 +61,63 @@ while answer != 'Q':  # While the answer isn't 'Q'
     print(player.current_room)  # Print room information of current room.
     print('=' * 70)  # For improved readability.
     # Get user input, make uppercase.
-    answer = input('What direction should I take? [N/S/E/W]: ').upper()
+    answer = input('What direction should I take? [N/S/E/W]: ').split()
     print('-' * 55)  # For improved readability.
-    if answer == 'N':  # If the answer is north...
-        if hasattr(player.current_room, 'n_to'):  # If N room exists...
-            player.current_room = player.current_room.n_to  # Make the move.M
-    elif answer == 'S':  # If the answer is south...
-        if hasattr(player.current_room, 's_to'):  # If S room exists...
-            player.current_room = player.current_room.s_to  # Make the move.
-    elif answer == 'E':  # If the answer is east...
-        if hasattr(player.current_room, 'e_to'):  # If E room exists...
-            player.current_room = player.current_room.e_to  # Make the move.
-    elif answer == 'W':  # If the answer is west...
-        if hasattr(player.current_room, 'w_to'):  # If W room exists...
-            player.current_room = player.current_room.w_to  # Make the move.
-    elif answer == 'Q':  # If the user wants to quit...
-        exit  # Quit the game.
-    elif answer not in ['N', 'S', 'E', 'W', 'Q']:
-        print('Invalid cardinal direction!')
-        print('=' * 70)  # For improved readability.
+
+    # Movement / one word.
+    if len(answer) == 1:
+        answer = answer[0].upper()
+        if answer == 'N':  # If the answer is north...
+            if hasattr(player.current_room, 'n_to'):  # If N room exists...
+                player.current_room = player.current_room.n_to  # Make the move.
+            else:
+                print('Invalid Direction!')  # Otherwise, print error.
+                print('=-' * 25)  # For improved readability.
+        elif answer == 'S':  # If the answer is south...
+            if hasattr(player.current_room, 's_to'):  # If S room exists...
+                player.current_room = player.current_room.s_to  # Make the move.
+            else:
+                print('Invalid Direction!')  # Otherwise, print error.
+                print('=-' * 25)  # For improved readability.
+        elif answer == 'E':  # If the answer is east...
+            if hasattr(player.current_room, 'e_to'):  # If E room exists...
+                player.current_room = player.current_room.e_to  # Make the move.
+            else:
+                print('Invalid Direction!')  # Otherwise, print error.
+                print('=-' * 25)  # For improved readability.
+        elif answer == 'W':  # If the answer is west...
+            if hasattr(player.current_room, 'w_to'):  # If W room exists...
+                player.current_room = player.current_room.w_to  # Make the move.
+            else:
+                print('Invalid Direction!')  # Otherwise, print error.
+                print('=-' * 25)  # For improved readability.
+        elif answer == 'Q':  # If the user wants to quit...
+            exit  # Quit the game.
+        elif answer == "I":
+            print('Current user inventory:')
+            print(player.current_room.items)
+        elif answer not in ['N', 'S', 'E', 'W', 'Q', 'I']:
+            print('Invalid cardinal direction!')
+            print('=' * 70)  # For improved readability.
+    # Actions / two words.
+    elif len(answer) == 2:  # If there's two words...
+        if answer[0].lower() in ['get', 'take']:  # If it's a valid 'take' command...
+            if answer[1].lower() in player.current_room.items:  # Confirm the item is in the room.
+                player.items.append(answer[1].lower())  # Append to the player inventory.
+                player.current_room.items.remove(answer[1].lower())  # Remove from room inventory.
+            elif answer[1].lower() not in player.current_room.items:  # If not in room...
+                print('Item does not exist in this room!')  # Print error.
+                print('=-' * 25)  # For improved readability.
+        # If command is drop + item exists in our player items...
+        elif answer[0].lower() == 'drop' and answer[1].lower() in player.items:
+            player.items.remove(answer[1].lower())  # Remove that item from inventory.
+            player.current_room.items.append(answer[1].lower())
+        # If command is drop + item does not exist in our inventory.
+        elif answer[0].lower() == 'drop' and answer[1].lower() not in player.items:
+            print("You don't have that item in your inventory to drop!")  # Print error.
+            print('=-' * 25)  # For improved readability.
+        else:
+            print(f'{answer[1]} is not in {player.current_room.name}')  # Print error.
+            print('=-' * 25)  # For improved readability.
+    else:
+        print('You have entered an invalid command!')

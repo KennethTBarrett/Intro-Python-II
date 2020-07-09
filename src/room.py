@@ -3,12 +3,13 @@
 
 
 class Room:
-    def __init__(self, name, description):
+    def __init__(self, name, description, items=[]):
         self.name = name
         self.description = description
+        self.items = items
 
     def __str__(self):
         currentname = f"Current room: {self.name}"
         currentdesc = f"Room Description: {self.description}"
-
-        return currentname + "\n" + currentdesc
+        items_in_room = f"Items in Room: {self.items}"
+        return currentname + "\n" + currentdesc + "\n" + items_in_room
