@@ -26,7 +26,7 @@ Up to this point, you've gotten your feet wet by working on a bunch of small Pyt
 
 * Make rooms able to hold multiple items ✓
 * Make the player able to carry multiple items ✓
-* Add items to the game that the user can carry around
+* Add items to the game that the user can carry around ✓
 * Add `get [ITEM_NAME]` and `drop [ITEM_NAME]` commands to the parser ✓
 
 ## Specification

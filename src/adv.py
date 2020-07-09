@@ -69,7 +69,8 @@ while answer != 'Q':  # While the answer isn't 'Q'
     print(player.current_room)  # Print room information of current room.
     print('=' * 70)  # For improved readability.
     # Get user input, make uppercase.
-    answer = input('What direction should I take? [N/S/E/W]: ').split()
+    print('What direction should I take? [N/S/E/W]')
+    answer = input('Other options [GET/DROP/I]: ').split()
     print('-' * 55)  # For improved readability.
 
     # Movement / one word.
@@ -77,25 +78,25 @@ while answer != 'Q':  # While the answer isn't 'Q'
         answer = answer[0].upper()
         if answer == 'N':  # If the answer is north...
             if hasattr(player.current_room, 'n_to'):  # If N room exists...
-                player.current_room = player.current_room.n_to  # Make the move.
+                player.current_room = player.current_room.n_to  # Make move.
             else:
                 print('Invalid Direction!')  # Otherwise, print error.
                 print('=-' * 25)  # For improved readability.
         elif answer == 'S':  # If the answer is south...
             if hasattr(player.current_room, 's_to'):  # If S room exists...
-                player.current_room = player.current_room.s_to  # Make the move.
+                player.current_room = player.current_room.s_to  # Make move.
             else:
                 print('Invalid Direction!')  # Otherwise, print error.
                 print('=-' * 25)  # For improved readability.
         elif answer == 'E':  # If the answer is east...
             if hasattr(player.current_room, 'e_to'):  # If E room exists...
-                player.current_room = player.current_room.e_to  # Make the move.
+                player.current_room = player.current_room.e_to  # Make move.
             else:
                 print('Invalid Direction!')  # Otherwise, print error.
                 print('=-' * 25)  # For improved readability.
         elif answer == 'W':  # If the answer is west...
             if hasattr(player.current_room, 'w_to'):  # If W room exists...
-                player.current_room = player.current_room.w_to  # Make the move.
+                player.current_room = player.current_room.w_to  # Make move.
             else:
                 print('Invalid Direction!')  # Otherwise, print error.
                 print('=-' * 25)  # For improved readability.
@@ -113,25 +114,33 @@ while answer != 'Q':  # While the answer isn't 'Q'
             print('=' * 70)  # For improved readability.
     # Actions / two words.
     elif len(answer) == 2:  # If there's two words...
-        if answer[0].lower() in ['get', 'take']:  # If it's a valid 'take' command...
-            if answer[1].lower() in player.current_room.items:  # Confirm the item is in the room.
-                player.items.append(answer[1].lower())  # Append to the player inventory.
-                player.current_room.items.remove(answer[1].lower())  # Remove from room inventory.
-                print(Item.on_take(item=answer[1].lower()))
-            elif answer[1].lower() not in player.current_room.items:  # If not in room...
+        if answer[0].lower() in ['get', 'take']:  # If valid 'take' command...
+            # Confirm item is in room.
+            if answer[1].lower() in player.current_room.items:
+                # Append to player inventory.
+                player.items.append(answer[1].lower())
+                # Remove from room inventory.
+                player.current_room.items.remove(answer[1].lower())
+                print(Item.on_take(item=answer[1]))
+            # If not in room...
+            elif answer[1].lower() not in player.current_room.items:
                 print('Item does not exist in this room!')  # Print error.
                 print('=-' * 25)  # For improved readability.
         # If command is drop + item exists in our player items...
         elif answer[0].lower() == 'drop' and answer[1].lower() in player.items:
-            player.items.remove(answer[1].lower())  # Remove that item from inventory.
-            player.current_room.items.append(answer[1].lower())
+            # Remove that item from inventory.
+            player.items.remove(answer[1].lower())
+            player.current_room.items.append(answer[1])
             print(Item.on_drop(answer[1].lower()))
         # If command is drop + item does not exist in our inventory.
-        elif answer[0].lower() == 'drop' and answer[1].lower() not in player.items:
-            print("You don't have that item in your inventory to drop!")  # Print error.
+        elif (answer[0].lower() == 'drop' and
+              answer[1].lower() not in player.items):
+            # Print error.
+            print("You don't have that item in your inventory to drop!")
             print('=-' * 25)  # For improved readability.
         else:
-            print(f'{answer[1]} is not in {player.current_room.name}')  # Print error.
+            # Print error.
+            print(f'{answer[1]} is not in {player.current_room.name}')
             print('=-' * 25)  # For improved readability.
     else:
         print('You have entered an invalid command!')
